@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 
+/// Переключатель карточек
 class CardSwitcherWidget extends StatelessWidget {
-  const CardSwitcherWidget({super.key});
+  const CardSwitcherWidget({
+    this.onLeftArrowPressed,
+    this.onRightArrowPressed,
+    super.key,
+  });
+
+  final VoidCallback? onLeftArrowPressed;
+  
+  final VoidCallback? onRightArrowPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -9,14 +18,14 @@ class CardSwitcherWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-          onPressed: () {},
+          onPressed: onLeftArrowPressed,
           icon: const Icon(Icons.chevron_left_rounded),
         ),
         const SizedBox(
           width: 100,
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: onRightArrowPressed,
           icon: const Icon(Icons.chevron_right_rounded),
         ),
       ],
