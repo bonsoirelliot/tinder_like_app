@@ -15,7 +15,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // final cardSliderBloc = CardSliderBloc();
   final homeBloc = HomeBloc();
 
   @override
