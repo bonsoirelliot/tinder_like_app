@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tinder_like_app/common/presentation/custom_error_widget.dart';
 import 'package:tinder_like_app/sections/home/bloc/home_bloc.dart';
-import 'package:tinder_like_app/sections/home/data/models/user_model.dart';
+import 'package:tinder_like_app/sections/home/data/models/user/user_model.dart';
 import 'package:tinder_like_app/sections/home/presentation/widgets/card_slider/bloc/card_slider_bloc.dart';
 import 'package:tinder_like_app/sections/home/presentation/widgets/card_slider/presentation/card_slider_widget.dart';
 import 'package:tinder_like_app/sections/home/presentation/widgets/card_switcher_widget.dart';
@@ -15,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final cardSliderBloc = CardSliderBloc();
+  // final cardSliderBloc = CardSliderBloc();
   final homeBloc = HomeBloc();
 
   @override
@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
             }
 
             return BlocProvider(
-              create: (_) => cardSliderBloc,
+              create: (_) => CardSliderBloc(),
               child: _Body(
                 users: (state as HomeSuccess).users,
               ),

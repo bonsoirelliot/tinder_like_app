@@ -1,6 +1,6 @@
-import 'package:tinder_like_app/sections/home/data/models/address_model.dart';
-import 'package:tinder_like_app/sections/home/data/models/company_model.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:tinder_like_app/sections/home/data/models/user/address_model.dart';
+import 'package:tinder_like_app/sections/home/data/models/user/company_model.dart';
 
 part 'user_model.g.dart';
 
@@ -25,6 +25,20 @@ class UserModel {
     required this.website,
     required this.company,
   });
+
+  String toBulletList() {
+    final StringBuffer buffer = StringBuffer();
+
+    buffer.write('• ID: $id\n');
+    buffer.write('• Username: $username\n');
+    buffer.write('• Email: $email\n');
+    buffer.write('• Address: ${address.toBulletList()}\n');
+    buffer.write('• Phone: $phone\n');
+    buffer.write('• Website: $website\n');
+    buffer.write('• ${company.toBulletList()}\n');
+
+    return buffer.toString();
+  }
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     try {

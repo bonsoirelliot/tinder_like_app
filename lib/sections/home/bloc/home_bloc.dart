@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:tinder_like_app/sections/home/data/models/user_model.dart';
+import 'package:tinder_like_app/sections/home/data/models/user/user_model.dart';
 import 'package:tinder_like_app/sections/home/services/users_load_service.dart';
 
 part 'home_event.dart';

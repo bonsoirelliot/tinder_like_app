@@ -14,6 +14,16 @@ class CompanyModel {
     required this.bs,
   });
 
+  String toBulletList() {
+    final StringBuffer buffer = StringBuffer();
+
+    buffer.write('Name: $name\n');
+    buffer.write('Catch Phrase: $catchPhrase\n');
+    buffer.write('BS: $bs');
+
+    return buffer.toString();
+  }
+
   factory CompanyModel.fromJson(Map<String, dynamic> json) {
     try {
       return _$CompanyModelFromJson(json);

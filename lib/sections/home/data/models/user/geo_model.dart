@@ -12,8 +12,12 @@ class GeoModel {
     required this.lng,
   });
 
-  factory GeoModel.fromJson(Map<String,dynamic> json) {
-     try {
+  String toBulletList() {
+    return 'Lat: $lat\nLng: $lng';
+  }
+
+  factory GeoModel.fromJson(Map<String, dynamic> json) {
+    try {
       return _$GeoModelFromJson(json);
     } catch (e) {
       throw Exception('GeoModel: $e');

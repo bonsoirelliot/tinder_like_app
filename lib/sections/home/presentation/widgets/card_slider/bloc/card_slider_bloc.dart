@@ -1,12 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:loop_page_view/loop_page_view.dart';
 import 'package:meta/meta.dart';
 
 part 'card_slider_event.dart';
 part 'card_slider_state.dart';
 
 class CardSliderBloc extends Bloc<CardSliderEvent, CardSliderState> {
-  final pageController = PageController();
+  final pageController = LoopPageController();
 
   CardSliderBloc() : super(CardSliderInitial()) {
     on<NextCardSliderEvent>(_onNextCard);
@@ -14,16 +15,14 @@ class CardSliderBloc extends Bloc<CardSliderEvent, CardSliderState> {
   }
 
   void _onNextCard(NextCardSliderEvent event, Emitter<CardSliderState> emit) {
-    _animateToPage(pageController.page!.ceil() + 1);
+    pageController.nextPage(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+    );
   }
 
   void _onPrevCard(PrevCardSliderEvent event, Emitter<CardSliderState> emit) {
-    _animateToPage(pageController.page!.ceil() - 1);
-  }
-
-  void _animateToPage(int page) {
-    pageController.animateToPage(
-      page,
+    pageController.previousPage(
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOut,
     );

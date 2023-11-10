@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:tinder_like_app/sections/home/data/models/user_model.dart';
+import 'package:tinder_like_app/sections/home/data/models/user/user_model.dart';
 
 class UsersLoadService {
   static Future<List<UserModel>> loadUsers() async {

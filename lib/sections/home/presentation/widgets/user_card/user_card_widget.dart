@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_like_app/const/theme/styles.dart';
-import 'package:tinder_like_app/sections/home/data/models/user_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tinder_like_app/sections/home/data/models/photo/photo_model.dart';
+import 'package:tinder_like_app/sections/home/data/models/user/user_model.dart';
+import 'package:tinder_like_app/sections/home/presentation/widgets/user_card/bloc/photos_bloc.dart';
+import 'package:tinder_like_app/sections/home/presentation/widgets/user_card/user_card_info_widget.dart';
+import 'package:tinder_like_app/sections/home/presentation/widgets/user_card/user_photo_placeholder.dart';
+import 'package:tinder_like_app/sections/home/presentation/widgets/user_card/user_photo_widget.dart';
 
+/// Карточка пользователя
 class UserCardWidget extends StatelessWidget {
   const UserCardWidget({
     required this.model,
@@ -12,48 +18,53 @@ class UserCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                'assets/images/person.jpg',
-                fit: BoxFit.cover,
-                height: MediaQuery.of(context).size.height * .7,
+    return BlocProvider(
+      create: (_) => PhotosBloc(userId: model.id),
+      child: BlocBuilder<PhotosBloc, PhotosState>(
+        builder: (context, state) {
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  if (state is PhotosSuccess)
+                    UserPhotoWidget(
+                      photo: state.photos.first.url,
+                      onPressed: () => _showPhotosDialog(context, state.photos),
+                    ),
+                  if (state is PhotosLoading || state is PhotosError)
+                    const UserPhotoPlaceholder(),
+                  UserCardInfoWidget(model: model),
+                ],
               ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                 Text(
-                  model.name,
-                  style: AppStyles.h1,
-                ),
-                 Text(
-                  model.company.name,
-                  style: AppStyles.h3,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Text(
-                  'Description' * 50,
-                  style: AppStyles.h3.copyWith(
-                    color: Colors.black.withOpacity(.6),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+          );
+        },
       ),
+    );
+  }
+
+  void _showPhotosDialog(BuildContext context, List<PhotoModel> photos) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        final size = MediaQuery.of(context).size;
+        return Center(
+          child: Container(
+            height: size.height * .6,
+            width: size.width * .9,
+            color: Colors.white,
+            child: PageView.builder(
+              controller: PageController(viewportFraction: .8),
+              itemCount: photos.length,
+              itemBuilder: (_, i) => Image.network(
+                photos[i].url,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
