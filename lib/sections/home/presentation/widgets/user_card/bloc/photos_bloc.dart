@@ -8,9 +8,14 @@ part 'photos_event.dart';
 part 'photos_state.dart';
 
 class PhotosBloc extends Bloc<PhotosEvent, PhotosState> {
-  final int userId;
+  final AlbumsLoadService albumsLoadService;
 
-  PhotosBloc({required this.userId}) : super(PhotosLoading()) {
+  final PhotosLoadService photosLoadService;
+
+  PhotosBloc({
+    required this.albumsLoadService,
+    required this.photosLoadService,
+  }) : super(PhotosLoading()) {
     on<PhotosLoad>(_onLoadPhotos);
 
     add(PhotosLoad());
@@ -23,9 +28,9 @@ class PhotosBloc extends Bloc<PhotosEvent, PhotosState> {
     emit(PhotosLoading());
 
     try {
-      final albums = await AlbumsLoadService.loadAlbums(userId);
+      final albums = await albumsLoadService.loadAlbums();
 
-      final photos = await PhotosLoadService.loadPhotos(albums.first.id);
+      final photos = await photosLoadService.loadPhotos(albums.first.id);
 
       emit(PhotosSuccess(photos: photos));
     } on Exception catch (e) {

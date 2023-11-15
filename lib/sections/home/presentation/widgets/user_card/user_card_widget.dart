@@ -6,6 +6,8 @@ import 'package:tinder_like_app/sections/home/presentation/widgets/user_card/blo
 import 'package:tinder_like_app/sections/home/presentation/widgets/user_card/user_card_info_widget.dart';
 import 'package:tinder_like_app/sections/home/presentation/widgets/user_card/user_photo_placeholder.dart';
 import 'package:tinder_like_app/sections/home/presentation/widgets/user_card/user_photo_widget.dart';
+import 'package:tinder_like_app/sections/home/services/album_load_service.dart';
+import 'package:tinder_like_app/sections/home/services/photos_load_service.dart';
 
 /// Карточка пользователя
 class UserCardWidget extends StatelessWidget {
@@ -19,7 +21,10 @@ class UserCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => PhotosBloc(userId: model.id),
+      create: (_) => PhotosBloc(
+        albumsLoadService: AlbumsLoadService(userId: model.id),
+        photosLoadService: PhotosLoadService(),
+      ),
       child: BlocBuilder<PhotosBloc, PhotosState>(
         builder: (context, state) {
           return SingleChildScrollView(

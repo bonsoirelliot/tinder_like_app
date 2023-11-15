@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loop_page_view/loop_page_view.dart';
 import 'package:tinder_like_app/common/presentation/custom_error_widget.dart';
 import 'package:tinder_like_app/sections/home/bloc/home_bloc.dart';
 import 'package:tinder_like_app/sections/home/data/models/user/user_model.dart';
-import 'package:tinder_like_app/sections/home/presentation/widgets/card_slider/bloc/card_slider_bloc.dart';
 import 'package:tinder_like_app/sections/home/presentation/widgets/card_slider/presentation/card_slider_widget.dart';
 import 'package:tinder_like_app/sections/home/presentation/widgets/card_switcher_widget.dart';
+import 'package:tinder_like_app/sections/home/services/users_load_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final homeBloc = HomeBloc();
+  final homeBloc = HomeBloc(usersLoadService: UsersLoadService());
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             }
 
-            return BlocProvider(
-              create: (_) => CardSliderBloc(),
-              child: _Body(
-                users: (state as HomeSuccess).users,
-              ),
+            return _Body(
+              users: (state as HomeSuccess).users,
             );
           },
         ),
@@ -50,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class _Body extends StatelessWidget {
+class _Body extends StatefulWidget {
   const _Body({
     required this.users,
     super.key,
@@ -59,12 +57,20 @@ class _Body extends StatelessWidget {
   final List<UserModel> users;
 
   @override
+  State<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<_Body> {
+  final controller = LoopPageController();
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Flexible(
           child: CardSliderWidget(
-            users: users,
+            users: widget.users,
+            controller: controller,
           ),
         ),
         Padding(
@@ -73,10 +79,14 @@ class _Body extends StatelessWidget {
             bottom: 6,
           ),
           child: CardSwitcherWidget(
-            onLeftArrowPressed: () =>
-                context.read<CardSliderBloc>().add(PrevCardSliderEvent()),
-            onRightArrowPressed: () =>
-                context.read<CardSliderBloc>().add(NextCardSliderEvent()),
+            onLeftArrowPressed: () => controller.nextPage(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+            ),
+            onRightArrowPressed: () => controller.previousPage(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+            ),
           ),
         ),
       ],

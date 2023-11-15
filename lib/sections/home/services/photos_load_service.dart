@@ -1,15 +1,12 @@
-import 'package:dio/dio.dart';
+import 'package:tinder_like_app/common/domain/request_handler.dart';
 import 'package:tinder_like_app/sections/home/data/models/photo/photo_model.dart';
 
 class PhotosLoadService {
-  static Future<List<PhotoModel>> loadPhotos(int albumId) async {
-    final res = await Dio(
-      BaseOptions(
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
-      ),
-    ).get(
-      'https://jsonplaceholder.typicode.com/photos/',
+  final rh = RequestHandler();
+
+  Future<List<PhotoModel>> loadPhotos(int albumId) async {
+    final res = await rh.get(
+      '/photos/',
       queryParameters: {
         'albumId': albumId,
       },

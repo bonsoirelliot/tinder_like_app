@@ -7,7 +7,11 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc() : super(HomeLoading()) {
+  final UsersLoadService usersLoadService;
+
+  HomeBloc({
+    required this.usersLoadService,
+  }) : super(HomeLoading()) {
     on<HomeLoadUsersEvent>(_onLoadUsers);
 
     add(HomeLoadUsersEvent());
@@ -20,7 +24,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(HomeLoading());
 
     try {
-      final users = await UsersLoadService.loadUsers();
+      final users = await usersLoadService.loadUsers();
 
       emit(HomeSuccess(users: users));
     } on Exception catch (e) {
